@@ -1,9 +1,14 @@
 import React, {Component} from 'react'
 import { View, TouchableOpacity, Text } from 'react-native'
-import { getMetricMetaInfo, timeToString } from '../utils/helpers'
+import { getMetricMetaInfo, timeToString, getDailyReminderValue } from '../utils/helpers'
 import Sliders from './Sliders'
 import Steppers from './Steppers'
 import DateHeader from './DateHeader'
+import {Ionicons} from '@expo/vector-icons'
+import TextButton from './TextButton'
+import { submitEntry, removeEntry } from '../utils/api'
+import {connect} from 'react-redux'
+import {addEntry} from '../actions'
 
 function SubmitBtn ({ onPress }) {
   return (
@@ -13,7 +18,7 @@ function SubmitBtn ({ onPress }) {
   )
 }
 
-export default class AddEntry extends Component {
+class AddEntry extends Component {
   state = {
     run: 0,
     swim: 0,
@@ -53,6 +58,10 @@ export default class AddEntry extends Component {
     const key = timeToString()
     const entry = this.state
 
+    this.props.dispatch(addEntry({
+      [key]: entry,
+    }))
+    
     this.setState(() => ({
       run: 0,
       swim: 0,
@@ -61,17 +70,41 @@ export default class AddEntry extends Component {
       eat: 0,
     }))
 
-    // Update Redux
-
     // Navigate to Home
 
-    // Save to Database
+    submitEntry({key, entry})
 
     // Clear local Notifications
+  }
+  reset = () => {
+    const key = timeToString()
+
+    this.props.dispatch(addEntry({
+      [key]: getDailyReminderValue()
+    }))
+
+    // Return to Home
+
+    removeEntry(key)
   }
 
   render() {
     const metaInfo = getMetricMetaInfo()
+
+    if (this.props.alreadyLogged) {
+      return (
+        <View>
+          <Ionicons
+            name="ios-happy-outline"
+            size={100}
+          />
+          <Text>You have already logged your information for the day!</Text>
+          <TextButton onPress={this.reset} style={{justifyContent: 'center'}}>
+            Reset
+          </TextButton>
+        </View>
+      )
+    }
     return (
       <View>
         <DateHeader date={(new Date()).toLocaleDateString()}/>
@@ -103,3 +136,13 @@ export default class AddEntry extends Component {
     )
   }
 }
+
+function mapStateToProps(state){
+  const key = timeToString()
+
+  return {
+    alreadyLogged: state[key] && typeof state[key].today === 'undefined'
+  }
+}
+
+export default connect(mapStateToProps)(AddEntry)
