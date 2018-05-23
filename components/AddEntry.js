@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { View, TouchableOpacity, Text, Platform, StyleSheet } from 'react-native'
+import { View, TouchableOpacity, Text, Platform, StyleSheet} from 'react-native'
 import { getMetricMetaInfo, timeToString, getDailyReminderValue } from '../utils/helpers'
 import Sliders from './Sliders'
 import Steppers from './Steppers'
