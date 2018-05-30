@@ -14,8 +14,8 @@ import {white, purple, blue} from '../utils/colors'
 function SubmitBtn ({ onPress }) {
   return (
     <TouchableOpacity
-      onPress={onPress}
-      style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.androidSubmitBtn}>
+      style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.androidSubmitBtn}
+      onPress={onPress}>
         <Text style={styles.submitBtnTxt}>SUBMIT</Text>
     </TouchableOpacity>
   )
@@ -37,17 +37,18 @@ class AddEntry extends Component {
 
       return {
         ...state,
-        [metric]: count > max ? max : count
+        [metric]: count > max ? max : count,
       }
     })
   }
   decrement = (metric) => {
     this.setState((state) => {
       const count = state[metric] - getMetricMetaInfo(metric).step
+      const min = 0
 
       return {
         ...state,
-        [metric]: count < 0 ? 0 : count,
+        [metric]: count < min ? min : count,
       }
     })
   }
@@ -187,7 +188,7 @@ function mapStateToProps(state){
   const key = timeToString()
 
   return {
-    alreadyLogged: state[key] && typeof state[key].today === 'undefined'
+    alreadyLogged: (state[key] && typeof state[key].today === 'undefined')
   }
 }
 

@@ -3,6 +3,12 @@ import { View, StyleSheet } from 'react-native';
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { white, red, orange, lightPurp, blue, pink } from './colors';
 
+export function getDailyReminderValue() {
+  return {
+    today: "👋 Don't forget to log your data today"
+  }
+}
+
 export function isBetween (num, x, y) {
   if (num >= x && num <= y) {
     return true
@@ -154,10 +160,4 @@ export function getMetricMetaInfo(metric) {
   return typeof metric === 'undefined'
     ? info
     : info[metric]
-}
-
-export function getDailyReminderValue() {
-  return {
-    today: "👋 Don't forget to log your data today"
-  }
 }

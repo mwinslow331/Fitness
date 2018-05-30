@@ -10,10 +10,11 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={createStore(reducer)}>
-        <View style={{flex: 1, marginTop: 20}}>
+        <View style={{flex: 1}}>
+          <View style={{height: 20}} />
           <History />
         </View>
       </Provider>
-    );
+    )
   }
 }
